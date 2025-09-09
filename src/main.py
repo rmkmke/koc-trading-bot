@@ -5,6 +5,7 @@ from src.logger import setup_logger
 from src.config import load_config, switch_account
 from src.api_manager import APIManager
 from src.data_pipeline import DataPipeline
+from src.backtester import Backtester
 from src.plugins import load_plugins
 from src.telemetry import TelemetryBus
 from apscheduler.schedulers.asyncio import AsyncIOScheduler
@@ -22,6 +23,7 @@ class App:
         self.cfg = load_config()
         self.api = APIManager(self.cfg)
         self.dp = DataPipeline(Path(__file__).resolve().parents[1] / "data_cache")
+        self.bt = Backtester()
         self.scheduler = AsyncIOScheduler()
         self.telemetry = TelemetryBus()
         self.gui = None
@@ -83,6 +85,22 @@ class App:
             self.gui.start_btn.configure(state="normal")
             self.gui.stop_btn.configure(state="disabled")
 
+    async def run_backtest(self, params: dict):
+        try:
+            exchange = params.get("exchange", "binance")
+            symbol = params.get("symbol", "BTC/USDT")
+            timeframe = params.get("timeframe", "1m")
+            limit = int(params.get("limit", 500))
+            # Fetch data and run backtest
+            df = await self.dp.fetch_historical(exchange, symbol, timeframe=timeframe, limit=limit)
+            result = self.bt.run_vectorized(df, params)
+            # Send to GUI via the same queue
+            self.data_queue.put({"backtest": result})
+            if self.gui:
+                self.gui.set_status("Status: Backtest complete")
+        except Exception as e:
+            logger.error({"event": "backtest_failed", "err": str(e)})
+
     def toggle_account(self, new_mode):
         switch_account(self.cfg, self.gui.account_menu.get(), new_mode)
         logger.info({"event": "account_switched", "mode": new_mode})
@@ -97,25 +115,31 @@ class App:
 
 def main():
     app = App()
-
+    
     async def start_coro():
         await app.start()
-
+    
     async def stop_coro():
         await app.stop()
+    
+    async def backtest_coro(p):
+        await app.run_backtest(p)
 
     def on_start():
         asyncio.ensure_future(start_coro())
-
+    
     def on_stop():
         asyncio.ensure_future(stop_coro())
+    
+    def on_backtest(params):
+        asyncio.ensure_future(backtest_coro(params))
 
     def on_switch(mode):
         app.toggle_account(mode)
-
+    
     try:
         accounts = list(app.cfg.keys()) if app.cfg else []
-        app.gui = _make_gui(on_start, on_stop, on_switch, app.data_queue, accounts, app.metrics_provider)
+        app.gui = _make_gui(on_start, on_stop, on_switch, app.data_queue, accounts, app.metrics_provider, on_backtest)
     except Exception as e:
         logger.warning({"event": "gui_init_failed", "err": str(e)})
         app.gui = None
@@ -136,4 +160,3 @@ if __name__ == "__main__":
         except Exception:
             pass
     main()
-
