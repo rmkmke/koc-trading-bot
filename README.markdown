@@ -68,6 +68,11 @@ python src/main.py
 - **Backtesting**: Hybrid (`vectorbt` sweeps, `Backtrader` event-driven), GUI-triggered.
 - **Deployment**: Virtualenv or Docker (optional).
 
+## Troubleshooting
+- **ccxt.pro WebSocket**: Use testnet/paper keys; check `logs/koc.json` for `order_latency_high` or reconnect warnings. Increase retry tolerance in `src/resilience.py` if connections flap.
+- **Headless GUI**: If `customtkinter` or display is unavailable, the app runs headless. On Ubuntu servers, use `xvfb` and set `DISPLAY`.
+- **Windows Keyring**: Ensure keyring backend is available. Verify entries in Windows Credential Manager under `koc:<name>:apiKey` and `koc:<name>:secret`.
+
 ## Configuration
 - **Keyring labels**: The code reads credentials from the OS keyring service named `koc` with keys `koc:<name>:apiKey` and `koc:<name>:secret` (e.g., `koc:binance:apiKey`).
 - **YAML fallback**: Copy `configs/accounts.yaml.example` to `configs/accounts.yaml` and fill `apiKey`/`secret`. These are overridden by keyring entries when present.
