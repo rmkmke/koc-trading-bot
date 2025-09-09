@@ -1,0 +1,6 @@
+ccxt>=4.3.0
+ccxt-pro>=2.6.45
+loguru>=0.7.2
+matplotlib>=3.9.0
+pandas>=2.2.2
+pytest>=8.3.2
