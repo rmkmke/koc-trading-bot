@@ -1,0 +1,26 @@
+name: Feature request
+description: Suggest an idea to improve K.O.C.
+labels: [enhancement]
+body:
+  - type: input
+    id: area
+    attributes:
+      label: Area
+      description: Module or component (e.g., backtester, data_pipeline)
+      placeholder: backtester
+  - type: textarea
+    id: problem
+    attributes:
+      label: Problem
+      description: What problem would this feature solve?
+  - type: textarea
+    id: proposal
+    attributes:
+      label: Proposal
+      description: Describe your proposed solution
+  - type: textarea
+    id: notes
+    attributes:
+      label: Notes
+      description: Additional context, links, or examples
+

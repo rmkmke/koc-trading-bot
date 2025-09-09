@@ -1,0 +1,25 @@
+name: Roadmap task
+description: Track a roadmap deliverable
+labels: [enhancement, roadmap]
+body:
+  - type: input
+    id: milestone
+    attributes:
+      label: Milestone
+      placeholder: v0.2.0
+  - type: input
+    id: area
+    attributes:
+      label: Area
+      placeholder: data_pipeline
+  - type: textarea
+    id: deliverable
+    attributes:
+      label: Deliverable
+      description: What will be delivered?
+  - type: textarea
+    id: acceptance
+    attributes:
+      label: Acceptance criteria
+      description: Concrete criteria to call this done
+
