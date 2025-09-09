@@ -1,0 +1,25 @@
+alpaca-py>=0.13.1
+ccxt>=4.3.0
+ccxt-pro>=2.6.45
+polygon-api-client>=1.14.0
+yfinance>=0.2.40
+python-binance>=1.0.19
+pykrakenapi>=0.1.8
+coinbase>=2.3.0
+pyzmq>=26.0.3
+vectorbt>=0.26.2
+backtrader>=1.9.78
+pandas>=2.2.2
+pyarrow>=16.1.0
+apscheduler>=3.10.4
+tenacity>=8.4.0
+pybreaker>=1.0.0
+loguru>=0.7.2
+keyring>=25.3.0
+customtkinter>=5.2.2
+PyYAML>=6.0.2
+matplotlib>=3.9.0
+pytest>=8.3.2
+pytest-asyncio>=0.23.8
+uvloop>=0.20.0; sys_platform != "win32"
+

@@ -1,0 +1,25 @@
+binance:
+  exchange: binance
+  account: testnet  # live | testnet
+  apiKey: ""
+  secret: ""
+kraken:
+  exchange: kraken
+  apiKey: ""
+  secret: ""
+coinbase:
+  exchange: coinbase
+  apiKey: ""
+  secret: ""
+alpaca:
+  exchange: alpaca
+  account: paper  # paper | live
+  base_url: https://paper-api.alpaca.markets
+  apiKey: ""
+  secret: ""
+polygon:
+  exchange: polygon
+  apiKey: ""
+yahoo:
+  exchange: yahoo
+
