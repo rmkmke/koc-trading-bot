@@ -1,5 +1,12 @@
 # K.O.C. Scripted Document
 
+> Doc sync notes (current scaffold)
+- The resilience helper is named `transient_retry` (not `resilience_retry`) and uses `tenacity.wait_random_exponential`, with a `pybreaker` circuit breaker configured as `fail_max=5`, `reset_timeout=30`.
+- Config is function-based: `src/config.py` exports `load_config()` and `switch_account()` rather than a `Config` class.
+- API integration is normalized around `ccxt.async_support` (plus `ccxt.pro` for streaming); venue-specific SDKs are not wired in this scaffold.
+- The GUI module exists at `src/interface.py` and is instantiated from `src/main.py` via a small factory for headless fallback.
+- Sample plugins live in `strategies/` and are spawned in isolated processes; metrics are aggregated by `src/telemetry.py`.
+
 ## Overview
 Grok’s K.O.C. is a modular, event-driven trading bot foundation for **<500ms trades** and **live OHLCV streaming** across Binance, Kraken, Coinbase, Alpaca, Polygon.io, Yahoo Finance, KuCoin, and Bitfinex. It features a sandboxed plugin system, a `customtkinter` GUI with `matplotlib` mini-chart and mascot, a ZeroMQ telemetry bus, and virtualenv-first deployment. This document outlines all modules with implementations.
 
